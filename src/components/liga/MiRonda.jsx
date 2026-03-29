@@ -124,7 +124,7 @@ export default function MiRonda({ participaciones, rondas, enfrentamientos, resu
                     {/* Left: Round number + rival */}
                     <div className="min-w-0">
                       <div className="flex items-center gap-1">
-                        <span className="text-xs text-wh-muted font-medium uppercase tracking-wide">
+                        <span className="text-xs text-wh-muted font-medium uppercase tracking-wide whitespace-nowrap">
                           Ronda {m.ronda?.numero}
                         </span>
                         <span className="text-xs text-wh-muted mx-1">·</span>
@@ -153,8 +153,8 @@ export default function MiRonda({ participaciones, rondas, enfrentamientos, resu
 
                     {/* Right: Mission + layout/despliegue + score */}
                     <div className="text-right flex-shrink-0">
-                      <p className="font-cinzel text-wh-text font-semibold text-base leading-tight">{m.ronda?.mision || '—'}</p>
-                      <div className="text-sm text-wh-muted flex flex-wrap items-center justify-end gap-x-1 gap-y-0.5 mt-0.5">
+                      <p className="font-cinzel text-wh-text font-semibold text-sm leading-tight">{m.ronda?.mision || '—'}</p>
+                      <div className="text-xs text-wh-muted flex flex-wrap items-center justify-end gap-x-1 gap-y-0.5 mt-0.5">
                         {m.ronda?.layout && (
                           <span className="text-wh-text">{m.ronda.layout}</span>
                         )}
