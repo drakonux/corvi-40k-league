@@ -1,0 +1,101 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    background-color: #0a0a0a;
+    color: #e5e5e5;
+    font-family: 'Inter', sans-serif;
+  }
+
+  body {
+    min-height: 100vh;
+    background-color: #0a0a0a;
+  }
+
+  h1, h2, h3 {
+    font-family: 'Cinzel', serif;
+  }
+
+  ::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: #111111;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: #c9a84c;
+    border-radius: 3px;
+  }
+}
+
+@layer components {
+  .btn-gold {
+    @apply bg-gold text-wh-bg font-semibold px-4 py-2 rounded transition-all
+           hover:bg-gold-light active:bg-gold-dark disabled:opacity-40 disabled:cursor-not-allowed;
+  }
+
+  .btn-outline {
+    @apply border border-gold text-gold font-semibold px-4 py-2 rounded transition-all
+           hover:bg-gold hover:text-wh-bg active:bg-gold-dark;
+  }
+
+  .btn-danger {
+    @apply bg-crimson text-white font-semibold px-4 py-2 rounded transition-all
+           hover:bg-crimson-light active:bg-crimson-dark;
+  }
+
+  .card {
+    @apply bg-wh-card border border-wh-border rounded-lg p-4;
+  }
+
+  .input-field {
+    @apply w-full bg-wh-surface border border-wh-border rounded px-3 py-2 text-wh-text
+           focus:outline-none focus:border-gold placeholder-wh-muted transition-colors;
+  }
+
+  .select-field {
+    @apply w-full bg-wh-surface border border-wh-border rounded px-3 py-2 text-wh-text
+           focus:outline-none focus:border-gold transition-colors cursor-pointer;
+  }
+
+  .tab-btn {
+    @apply px-4 py-2 font-cinzel text-sm font-semibold border-b-2 transition-all
+           text-wh-muted border-transparent hover:text-gold;
+  }
+
+  .tab-btn.active {
+    @apply text-gold border-gold;
+  }
+
+  .section-title {
+    @apply font-cinzel text-gold text-xl font-bold tracking-wider uppercase mb-4;
+  }
+
+  .gold-divider {
+    @apply border-t border-gold/30 my-6;
+  }
+}
+
+/* Animación de entrada */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in {
+  animation: fadeIn 0.3s ease-out;
+}
+
+/* Brillo dorado */
+@keyframes goldGlow {
+  0%, 100% { text-shadow: 0 0 8px rgba(201, 168, 76, 0.4); }
+  50% { text-shadow: 0 0 16px rgba(201, 168, 76, 0.8); }
+}
+
+.gold-glow {
+  animation: goldGlow 2.5s ease-in-out infinite;
+}
