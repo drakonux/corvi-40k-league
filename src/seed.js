@@ -51,7 +51,7 @@ async function seed() {
   const { data: ligaArr, error: ligaErr } = await supabase
     .from('ligas')
     .insert([{
-      nombre:       'GDM CA-2025',
+      nombre:       'III Liga 40K - 10th Edition',
       temporada:    '2025',
       fecha_inicio: '2025-01-01',
       estado:       'activa',
@@ -82,7 +82,7 @@ async function seed() {
       { liga_id: liga.id, numero: 1, mision: 'Purgar el Enemigo',       mision_url: 'https://gdmissions.app/primary-missions/purge-the-foe',   despliegue: 'Crisol de Batalla',      despliegue_url: 'https://gdmissions.app/deployment-zones/crucible-of-battle',  layout: 'Layout 2', layout_url: 'https://gdmissions.app/layouts/gw/layout-2' },
       { liga_id: liga.id, numero: 2, mision: 'Primordial',              mision_url: 'https://gdmissions.app/primary-missions/linchpin',          despliegue: 'Búsqueda y Destrucción', despliegue_url: 'https://gdmissions.app/deployment-zones/search-and-destroy',  layout: 'Layout 6', layout_url: 'https://gdmissions.app/layouts/gw/layout-6' },
       { liga_id: liga.id, numero: 3, mision: 'Terraformar',             mision_url: 'https://gdmissions.app/primary-missions/terraform',         despliegue: 'Choque Arrollador',      despliegue_url: 'https://gdmissions.app/deployment-zones/sweeping-engagement', layout: 'Layout 5', layout_url: 'https://gdmissions.app/layouts/gw/layout-5' },
-      { liga_id: liga.id, numero: 4, mision: 'Suministros Ocultos',     mision_url: 'https://gdmissions.app/primary-missions/hidden-supplies',   despliegue: 'Punto Crítico',          despliegue_url: 'https://gdmissions.app/deployment-zones/tipping-point',       layout: 'Layout 1', layout_url: 'https://gdmissions.app/layouts/gw/layout-1' },
+      { liga_id: liga.id, numero: 4, mision: 'Lanzamiento de Suministros', mision_url: 'https://gdmissions.app/primary-missions/supply-drop',   despliegue: 'Punto Crítico',          despliegue_url: 'https://gdmissions.app/deployment-zones/tipping-point',       layout: 'Layout 1', layout_url: 'https://gdmissions.app/layouts/gw/layout-1' },
       { liga_id: liga.id, numero: 5, mision: 'El Peso de la Confianza', mision_url: 'https://gdmissions.app/primary-missions/burden-of-trust',   despliegue: 'Albor de la Guerra',     despliegue_url: 'https://gdmissions.app/deployment-zones/dawn-of-war',         layout: 'Layout 4', layout_url: 'https://gdmissions.app/layouts/gw/layout-4' },
     ])
     .select()
