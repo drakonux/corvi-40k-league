@@ -20,15 +20,20 @@ function PodiumPlace({ standing, pos }) {
   const heights = { 1: 'h-28', 2: 'h-20', 3: 'h-16' }
   const order = { 1: 'order-2', 2: 'order-1', 3: 'order-3' }
   const factionColor = FACTION_COLORS[standing.jugador?.faccion] || '#c9a84c'
+  const factionImg = standing.jugador?.faction_image
+    ? `${import.meta.env.BASE_URL}factions/${standing.jugador.faction_image}`
+    : null
 
   return (
     <div className={`flex flex-col items-center ${order[pos]}`}>
       <Link to={`/jugador/${standing.jugador_id}`} className="group">
         <div
-          className="w-14 h-14 rounded-full border-2 flex items-center justify-center text-xs font-bold font-cinzel mb-2 transition-transform group-hover:scale-110"
-          style={{ borderColor: factionColor, color: factionColor, backgroundColor: `${factionColor}15` }}
+          className="w-14 h-14 rounded-full mb-2 transition-transform group-hover:scale-110 overflow-hidden"
+          style={{ boxShadow: '0 0 8px rgba(255,255,255,0.25), 0 0 2px rgba(255,255,255,0.4)' }}
         >
-          {getInitials(standing.jugador?.nombre)}
+          {factionImg && (
+            <img src={factionImg} alt="" className="w-full h-full object-cover" />
+          )}
         </div>
       </Link>
       <p className="text-xs text-wh-text font-semibold text-center max-w-16 leading-tight">
