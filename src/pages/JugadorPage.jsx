@@ -136,16 +136,21 @@ export default function JugadorPage() {
       <div className="card mb-6" style={{ borderColor: `${factionColor}30` }}>
         <div className="flex items-center gap-4">
           <div
-            className="w-16 h-16 rounded-full flex items-center justify-center text-xl font-cinzel font-bold flex-shrink-0"
+            className="w-16 h-16 flex-shrink-0"
             style={{
-              backgroundColor: `${factionColor}20`,
-              borderWidth: 2,
-              borderStyle: 'solid',
-              borderColor: factionColor,
-              color: factionColor,
+              WebkitMaskImage: 'radial-gradient(circle, black 45%, transparent 75%)',
+              maskImage: 'radial-gradient(circle, black 45%, transparent 75%)',
             }}
           >
-            {jugador.nombre.slice(0, 2).toUpperCase()}
+            {jugador.faction_image ? (
+              <img
+                src={`${import.meta.env.BASE_URL}factions/${jugador.faction_image}`}
+                alt=""
+                className="w-full h-full object-cover"
+              />
+            ) : (
+              <div className="w-full h-full rounded-full" style={{ backgroundColor: `${factionColor}20` }} />
+            )}
           </div>
           <div>
             <h1 className="font-cinzel text-2xl font-bold text-wh-text">{jugador.nombre}</h1>
@@ -206,8 +211,8 @@ export default function JugadorPage() {
                 <div className="flex items-center gap-4 text-sm">
                   {stats && (
                     <div className="text-right">
-                      <p className="text-gold font-cinzel font-bold">{stats.Pts} pts</p>
-                      <p className="text-xs text-wh-muted">{stats.PG}V · {stats.PP}D · {stats.PE}E</p>
+                      <p className="text-gold font-cinzel font-bold">{stats.PG} {stats.PG === 1 ? 'Victoria' : 'Victorias'}</p>
+                      <p className="text-xs text-wh-muted">{stats.PV} PV</p>
                     </div>
                   )}
                   {pos && (
