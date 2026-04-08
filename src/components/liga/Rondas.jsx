@@ -49,7 +49,7 @@ export default function Rondas({ rondas, enfrentamientos, resultados, participac
             <div className="flex items-start justify-between mb-4">
               <div>
                 <div className="flex items-center gap-2 mb-1">
-                  <span className="font-cinzel text-xs font-bold px-2 py-0.5 rounded bg-wh-surface text-wh-muted border border-wh-border">
+                  <span className="font-cinzel text-sm font-bold px-2 py-0.5 rounded bg-wh-surface text-wh-muted border border-wh-border -ml-2">
                     Ronda {ronda.numero}
                   </span>
                 </div>
@@ -68,7 +68,7 @@ export default function Rondas({ rondas, enfrentamientos, resultados, participac
             </div>
 
             {/* Mission details */}
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 mb-4 text-sm">
+            <div className="grid grid-cols-[3fr_2fr] sm:grid-cols-3 gap-3 mb-4 text-sm">
               <div>
                 <p className="text-wh-muted text-xs uppercase tracking-wide mb-0.5">Despliegue</p>
                 {ronda.despliegue_url ? (
@@ -110,7 +110,7 @@ export default function Rondas({ rondas, enfrentamientos, resultados, participac
                 return (
                   <div
                     key={enf.id}
-                    className="match-item flex items-center bg-wh-surface/50 min-h-[72px] px-4"
+                    className="match-item flex items-center bg-wh-surface/50 h-[80px] px-0 sm:px-4"
                   >
                     {/* Imagen facción izquierda */}
                     {jugadorImg[enf.jugador1_id] && (
@@ -120,25 +120,25 @@ export default function Rondas({ rondas, enfrentamientos, resultados, participac
                     )}
 
                     {/* Nombre jugador 1 */}
-                    <span className="relative z-10 font-cinzel font-semibold text-wh-text truncate flex-1 text-left uppercase tracking-wide pl-[108px]" style={{ fontSize: '15px' }}>
+                    <span className="relative z-10 font-cinzel font-semibold text-wh-text flex-1 uppercase tracking-wide min-w-0 sm:pl-[108px] leading-tight overflow-hidden flex items-center justify-center sm:block sm:text-left text-center text-[13px] sm:text-[15px]" style={{ textShadow: '0 0 3px #000, 1px 1px 2px #000, -1px -1px 2px #000, 0 0 14px rgba(201,168,76,0.75)' }}>
                       {j1}
                     </span>
 
                     {/* Marcador */}
-                    <div className="relative z-10 w-36 flex justify-center flex-shrink-0">
+                    <div className="relative z-10 w-20 sm:w-36 flex justify-center flex-shrink-0 mt-0.5 sm:mt-0">
                       {pending ? (
-                        <span className="text-xs text-wh-muted border border-wh-border rounded px-2 py-0.5">
+                        <span className="text-xs text-wh-text/60 border border-wh-text/25 rounded px-2 py-0.5">
                           Pendiente
                         </span>
                       ) : (
-                        <span className="font-cinzel font-bold text-gold text-3xl tracking-widest">
-                          {pv1} – {pv2}
+                        <span className="font-cinzel font-bold text-gold text-2xl sm:text-3xl tracking-widest whitespace-nowrap">
+                          {pv1}–{pv2}
                         </span>
                       )}
                     </div>
 
                     {/* Nombre jugador 2 */}
-<span className="relative z-10 font-cinzel font-semibold text-wh-text truncate flex-1 text-right uppercase tracking-wide pr-[108px]" style={{ fontSize: '15px' }}>
+                    <span className="relative z-10 font-cinzel font-semibold text-wh-text flex-1 uppercase tracking-wide min-w-0 sm:pr-[108px] leading-tight overflow-hidden flex items-center justify-center sm:block sm:text-right text-center text-[13px] sm:text-[15px]" style={{ textShadow: '0 0 3px #000, 1px 1px 2px #000, -1px -1px 2px #000, 0 0 14px rgba(201,168,76,0.75)' }}>
                       {j2}
                     </span>
 
