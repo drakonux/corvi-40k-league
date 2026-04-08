@@ -41,7 +41,7 @@ export default function LigaPage() {
       ] = await Promise.all([
         supabase
           .from('participaciones')
-          .select('jugador_id, jugadores(id, nombre, faccion)')
+          .select('jugador_id, jugadores(id, nombre, faccion, faction_image)')
           .eq('liga_id', id),
         supabase
           .from('rondas')

@@ -9,6 +9,21 @@ Desplegada en → **https://drakonux.github.io/corvi-40k-league**
 - Supabase (PostgreSQL + GitHub OAuth)
 - GitHub Pages (`gh-pages`)
 
+## Imágenes de facción
+
+Cada jugador puede tener una imagen de facción asociada que se muestra en los items de enfrentamiento con un efecto de degradado.
+
+- Las imágenes se colocan en `public/factions/` (ej. `space-marines.png`)
+- Se asignan por jugador mediante el campo `faction_image` en la tabla `jugadores` de Supabase:
+
+```sql
+ALTER TABLE jugadores ADD COLUMN faction_image TEXT;
+UPDATE jugadores SET faction_image = 'space-marines.png' WHERE nombre = 'David Aragonés';
+-- etc.
+```
+
+- Dos jugadores de la misma facción pueden tener imágenes distintas (el campo es por jugador, no por facción)
+
 ## Setup
 
 Crea `.env.local` en la raíz con tus credenciales de Supabase:

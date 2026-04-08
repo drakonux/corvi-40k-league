@@ -99,3 +99,57 @@
 .gold-glow {
   animation: goldGlow 2.5s ease-in-out infinite;
 }
+
+/* Imágenes de facción en items de enfrentamiento */
+.match-item {
+  position: relative;
+  overflow: hidden;
+  border-radius: 12px;
+}
+
+
+.faction-img-wrap {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: auto;
+  pointer-events: none;
+}
+
+.faction-img-wrap--left {
+  left: 0;
+  -webkit-mask-image: linear-gradient(to right,
+    transparent 0%,
+    black 12%,
+    black 30%,
+    transparent 100%
+  );
+  mask-image: linear-gradient(to right,
+    transparent 0%,
+    black 12%,
+    black 30%,
+    transparent 100%
+  );
+}
+
+.faction-img-wrap--right {
+  right: 0;
+  -webkit-mask-image: linear-gradient(to left,
+    transparent 0%,
+    black 12%,
+    black 30%,
+    transparent 100%
+  );
+  mask-image: linear-gradient(to left,
+    transparent 0%,
+    black 12%,
+    black 30%,
+    transparent 100%
+  );
+}
+
+.faction-img-wrap img {
+  height: 100%;
+  width: auto;
+  display: block;
+}

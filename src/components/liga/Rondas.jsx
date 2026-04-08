@@ -3,10 +3,16 @@ import { getCurrentRound } from '../../lib/standings'
 export default function Rondas({ rondas, enfrentamientos, resultados, participaciones }) {
   const currentRound = getCurrentRound(rondas, enfrentamientos, resultados)
 
-  // Build a map jugador_id → nombre
+  // Build maps jugador_id → nombre / faction_image
   const jugadorNombre = {}
+  const jugadorImg = {}
   for (const p of (participaciones || [])) {
-    if (p.jugadores) jugadorNombre[p.jugador_id] = p.jugadores.nombre
+    if (p.jugadores) {
+      jugadorNombre[p.jugador_id] = p.jugadores.nombre
+      if (p.jugadores.faction_image) {
+        jugadorImg[p.jugador_id] = `${import.meta.env.BASE_URL}factions/${p.jugadores.faction_image}`
+      }
+    }
   }
 
   function getResult(enfId) {
@@ -33,7 +39,7 @@ export default function Rondas({ rondas, enfrentamientos, resultados, participac
   }
 
   return (
-    <div className="space-y-4 fade-in">
+    <div className="space-y-[21px] fade-in pb-16">
       {[...rondas].sort((a, b) => a.numero - b.numero).map(ronda => {
         const rondasEnfs = enfrentamientos.filter(e => e.ronda_id === ronda.id)
 
@@ -98,27 +104,50 @@ export default function Rondas({ rondas, enfrentamientos, resultados, participac
             </div>
 
             {/* Matches */}
-            <div className="space-y-2">
+            <div className="space-y-3">
               {rondasEnfs.map(enf => {
                 const { j1, j2, pv1, pv2, pending } = getMatchLabel(enf)
                 return (
                   <div
                     key={enf.id}
-                    className="flex items-center bg-wh-surface/50 rounded px-3 py-2 text-sm"
+                    className="match-item flex items-center bg-wh-surface/50 min-h-[72px] px-4"
                   >
-                    <span className="font-medium text-wh-text truncate flex-1 text-left">{j1}</span>
-                    <div className="w-24 flex justify-center flex-shrink-0">
+                    {/* Imagen facción izquierda */}
+                    {jugadorImg[enf.jugador1_id] && (
+                      <div className="faction-img-wrap faction-img-wrap--left">
+                        <img src={jugadorImg[enf.jugador1_id]} alt="" />
+                      </div>
+                    )}
+
+                    {/* Nombre jugador 1 */}
+                    <span className="relative z-10 font-cinzel font-semibold text-wh-text truncate flex-1 text-left uppercase tracking-wide pl-[108px]" style={{ fontSize: '15px' }}>
+                      {j1}
+                    </span>
+
+                    {/* Marcador */}
+                    <div className="relative z-10 w-36 flex justify-center flex-shrink-0">
                       {pending ? (
                         <span className="text-xs text-wh-muted border border-wh-border rounded px-2 py-0.5">
                           Pendiente
                         </span>
                       ) : (
-                        <span className="font-cinzel font-bold text-gold text-sm">
+                        <span className="font-cinzel font-bold text-gold text-3xl tracking-widest">
                           {pv1} – {pv2}
                         </span>
                       )}
                     </div>
-                    <span className="font-medium text-wh-text truncate flex-1 text-right">{j2}</span>
+
+                    {/* Nombre jugador 2 */}
+<span className="relative z-10 font-cinzel font-semibold text-wh-text truncate flex-1 text-right uppercase tracking-wide pr-[108px]" style={{ fontSize: '15px' }}>
+                      {j2}
+                    </span>
+
+                    {/* Imagen facción derecha */}
+                    {jugadorImg[enf.jugador2_id] && (
+                      <div className="faction-img-wrap faction-img-wrap--right">
+                        <img src={jugadorImg[enf.jugador2_id]} alt="" />
+                      </div>
+                    )}
                   </div>
                 )
               })}
