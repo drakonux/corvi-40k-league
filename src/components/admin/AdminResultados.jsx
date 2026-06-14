@@ -58,7 +58,7 @@ export default function AdminResultados() {
     if (enfs && enfs.length > 0) {
       const { data: ress } = await supabase
         .from('resultados')
-        .select('id, enfrentamiento_id, pv1, pv2')
+        .select('id, enfrentamiento_id, pv1, pv2, estado')
         .in('enfrentamiento_id', enfs.map(e => e.id))
 
       setResultados(ress || [])
@@ -66,7 +66,7 @@ export default function AdminResultados() {
       // Pre-fill PV values from existing results
       const pvMap = {}
       for (const r of (ress || [])) {
-        pvMap[r.enfrentamiento_id] = { pv1: r.pv1?.toString() ?? '', pv2: r.pv2?.toString() ?? '' }
+        pvMap[r.enfrentamiento_id] = { pv1: r.pv1?.toString() ?? '', pv2: r.pv2?.toString() ?? '', estado: r.estado || 'jugado' }
       }
       setPvValues(pvMap)
     } else {
@@ -106,20 +106,22 @@ export default function AdminResultados() {
       return
     }
 
+    const estado = vals.estado === 'suspendido' ? 'suspendido' : 'jugado'
+
     setSavingId(enf.id)
     const existing = getExistingResult(enf.id)
 
     if (existing) {
       const { error } = await supabase
         .from('resultados')
-        .update({ pv1, pv2, updated_at: new Date().toISOString() })
+        .update({ pv1, pv2, estado, updated_at: new Date().toISOString() })
         .eq('id', existing.id)
       if (error) flash(error.message, true)
       else flash('Resultado actualizado')
     } else {
       const { error } = await supabase
         .from('resultados')
-        .insert({ enfrentamiento_id: enf.id, pv1, pv2 })
+        .insert({ enfrentamiento_id: enf.id, pv1, pv2, estado })
       if (error) flash(error.message, true)
       else flash('Resultado guardado')
     }
@@ -311,9 +313,10 @@ export default function AdminResultados() {
             {enfrentamientos.map(enf => {
               const j1 = jugadores[enf.jugador1_id]
               const j2 = jugadores[enf.jugador2_id]
-              const vals = pvValues[enf.id] || { pv1: '', pv2: '' }
+              const vals = pvValues[enf.id] || { pv1: '', pv2: '', estado: 'jugado' }
               const existing = getExistingResult(enf.id)
               const isSaving = savingId === enf.id
+              const isSuspendida = vals.estado === 'suspendido'
 
               const pv1Num = parseInt(vals.pv1)
               const pv2Num = parseInt(vals.pv2)
@@ -326,7 +329,9 @@ export default function AdminResultados() {
                     <div className="flex-1 text-center">
                       <p className="font-semibold text-sm text-wh-text">{j1?.nombre || 'J1'}</p>
                       <p className="text-xs text-wh-muted">{j1?.faccion || ''}</p>
-                      {outcome && (
+                      {isSuspendida ? (
+                        <span className="text-xs font-medium mt-1 inline-block text-yellow-400">Suspendido</span>
+                      ) : outcome && (
                         <span className={`text-xs font-medium mt-1 inline-block ${
                           outcome.j1 === 'Victoria' ? 'text-green-400' :
                           outcome.j1 === 'Derrota' ? 'text-red-400' : 'text-yellow-400'
@@ -339,7 +344,9 @@ export default function AdminResultados() {
                     <div className="flex-1 text-center">
                       <p className="font-semibold text-sm text-wh-text">{j2?.nombre || 'J2'}</p>
                       <p className="text-xs text-wh-muted">{j2?.faccion || ''}</p>
-                      {outcome && (
+                      {isSuspendida ? (
+                        <span className="text-xs font-medium mt-1 inline-block text-yellow-400">Suspendido</span>
+                      ) : outcome && (
                         <span className={`text-xs font-medium mt-1 inline-block ${
                           outcome.j2 === 'Victoria' ? 'text-green-400' :
                           outcome.j2 === 'Derrota' ? 'text-red-400' : 'text-yellow-400'
@@ -371,6 +378,37 @@ export default function AdminResultados() {
                       min="0"
                       max="100"
                     />
+                  </div>
+
+                  {/* Suspendida control */}
+                  <div className="mt-3 pt-3 border-t border-wh-border/40">
+                    <label className="flex items-center gap-2 cursor-pointer select-none">
+                      <input
+                        type="checkbox"
+                        checked={isSuspendida}
+                        onChange={e => setPvValues(v => ({ ...v, [enf.id]: { ...v[enf.id], estado: e.target.checked ? 'suspendido' : 'jugado' } }))}
+                        className="accent-yellow-400 w-4 h-4"
+                      />
+                      <span className="text-xs font-medium text-yellow-400">Partida suspendida (walkover)</span>
+                    </label>
+                    {isSuspendida && (
+                      <div className="flex gap-2 mt-2">
+                        <button
+                          type="button"
+                          onClick={() => setPvValues(v => ({ ...v, [enf.id]: { ...v[enf.id], pv1: '100', pv2: '0', estado: 'suspendido' } }))}
+                          className="flex-1 text-xs py-1 rounded border border-yellow-400/40 text-yellow-400 hover:bg-yellow-400/10 transition-colors"
+                        >
+                          Gana {j1?.nombre || 'J1'} (100–0)
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => setPvValues(v => ({ ...v, [enf.id]: { ...v[enf.id], pv1: '0', pv2: '100', estado: 'suspendido' } }))}
+                          className="flex-1 text-xs py-1 rounded border border-yellow-400/40 text-yellow-400 hover:bg-yellow-400/10 transition-colors"
+                        >
+                          Gana {j2?.nombre || 'J2'} (0–100)
+                        </button>
+                      </div>
+                    )}
                   </div>
 
                   <div className="flex gap-2 mt-3">

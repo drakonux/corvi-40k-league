@@ -27,7 +27,7 @@ export default function Rondas({ rondas, enfrentamientos, resultados, participac
     if (!res) {
       return { j1, j2, label: null, pending: true }
     }
-    return { j1, j2, pv1: res.pv1, pv2: res.pv2, pending: false }
+    return { j1, j2, pv1: res.pv1, pv2: res.pv2, pending: false, suspendida: res.estado === 'suspendido' }
   }
 
   if (!rondas || rondas.length === 0) {
@@ -106,7 +106,7 @@ export default function Rondas({ rondas, enfrentamientos, resultados, participac
             {/* Matches */}
             <div className="space-y-3">
               {rondasEnfs.map(enf => {
-                const { j1, j2, pv1, pv2, pending } = getMatchLabel(enf)
+                const { j1, j2, pv1, pv2, pending, suspendida } = getMatchLabel(enf)
                 return (
                   <div
                     key={enf.id}
@@ -125,15 +125,22 @@ export default function Rondas({ rondas, enfrentamientos, resultados, participac
                     </span>
 
                     {/* Marcador */}
-                    <div className="relative z-10 w-20 sm:w-36 flex justify-center flex-shrink-0 mt-0.5 sm:mt-0">
+                    <div className="relative z-10 w-20 sm:w-36 flex flex-col items-center justify-center flex-shrink-0 mt-0.5 sm:mt-0">
                       {pending ? (
                         <span className="text-xs text-wh-text/60 border border-wh-text/25 rounded px-2 py-0.5">
                           Pendiente
                         </span>
                       ) : (
-                        <span className="font-cinzel font-bold text-gold text-2xl sm:text-3xl tracking-widest whitespace-nowrap">
-                          {pv1}–{pv2}
-                        </span>
+                        <>
+                          <span className={`font-cinzel font-bold text-2xl sm:text-3xl tracking-widest whitespace-nowrap ${suspendida ? 'text-yellow-400' : 'text-gold'}`}>
+                            {pv1}–{pv2}
+                          </span>
+                          {suspendida && (
+                            <span className="font-cinzel text-[9px] sm:text-[10px] uppercase tracking-wider text-yellow-400/90 leading-none mt-0.5">
+                              Suspendido
+                            </span>
+                          )}
+                        </>
                       )}
                     </div>
 
