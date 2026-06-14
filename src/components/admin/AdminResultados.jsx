@@ -329,9 +329,7 @@ export default function AdminResultados() {
                     <div className="flex-1 text-center">
                       <p className="font-semibold text-sm text-wh-text">{j1?.nombre || 'J1'}</p>
                       <p className="text-xs text-wh-muted">{j1?.faccion || ''}</p>
-                      {isSuspendida ? (
-                        <span className="text-xs font-medium mt-1 inline-block text-yellow-400">Suspendido</span>
-                      ) : outcome && (
+                      {outcome && (
                         <span className={`text-xs font-medium mt-1 inline-block ${
                           outcome.j1 === 'Victoria' ? 'text-green-400' :
                           outcome.j1 === 'Derrota' ? 'text-red-400' : 'text-yellow-400'
@@ -344,9 +342,7 @@ export default function AdminResultados() {
                     <div className="flex-1 text-center">
                       <p className="font-semibold text-sm text-wh-text">{j2?.nombre || 'J2'}</p>
                       <p className="text-xs text-wh-muted">{j2?.faccion || ''}</p>
-                      {isSuspendida ? (
-                        <span className="text-xs font-medium mt-1 inline-block text-yellow-400">Suspendido</span>
-                      ) : outcome && (
+                      {outcome && (
                         <span className={`text-xs font-medium mt-1 inline-block ${
                           outcome.j2 === 'Victoria' ? 'text-green-400' :
                           outcome.j2 === 'Derrota' ? 'text-red-400' : 'text-yellow-400'
