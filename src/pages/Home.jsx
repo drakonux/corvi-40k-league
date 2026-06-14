@@ -44,14 +44,8 @@ function LigaArchivoCard({ liga, champion }) {
       className="block card hover:border-wh-text/30 transition-all group"
     >
       <div className="flex items-start gap-3">
-        {liga.logo_url ? (
+        {liga.logo_url && (
           <img src={liga.logo_url} alt={liga.nombre} className="w-12 h-12 object-contain flex-shrink-0" />
-        ) : (
-          <div className="w-12 h-12 rounded bg-wh-surface flex items-center justify-center flex-shrink-0">
-            <svg className="w-6 h-6 text-wh-muted" viewBox="0 0 40 40" fill="none">
-              <polygon points="20,4 36,32 4,32" stroke="currentColor" strokeWidth="2" fill="none" />
-            </svg>
-          </div>
         )}
         <div className="flex-1 min-w-0">
           <h3 className="font-cinzel text-wh-text font-semibold truncate group-hover:text-gold transition-colors">
