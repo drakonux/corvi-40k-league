@@ -67,7 +67,10 @@ function LigaArchivoCard({ liga, champion }) {
             </p>
           )}
         </div>
-        <span className="text-xs text-wh-muted border border-wh-border rounded px-1.5 py-0.5 flex-shrink-0">
+        <span className="inline-flex items-center gap-1 text-xs text-gold bg-gold/10 border border-gold/30 rounded px-1.5 py-0.5 flex-shrink-0">
+          <svg className="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+          </svg>
           Finalizada
         </span>
       </div>
