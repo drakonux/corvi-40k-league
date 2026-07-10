@@ -7,7 +7,8 @@ name: Supabase keep-alive
 
 on:
   schedule:
-    - cron: '0 6 */3 * *'   # cada 3 dias a las 06:00 UTC
+    - cron: '0 6 * * *'     # cada dia a las 06:00 UTC (antes cada 3 dias: no
+                            # bastaba para evitar la pausa por inactividad)
   workflow_dispatch:         # permite lanzarlo a mano desde la pestana Actions
 
 jobs:
