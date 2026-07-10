@@ -27,7 +27,7 @@ function PodiumPlace({ standing, pos }) {
 
   return (
     <div className={`flex flex-col items-center ${order[pos]}`}>
-      <Link to={`/jugador/${jugadorSlug(standing.jugador)}`} className="group">
+      <Link to={`/jugador/${standing.jugador?.slug || jugadorSlug(standing.jugador)}`} className="group">
         <div
           className="w-14 h-14 rounded-full mb-2 transition-transform group-hover:scale-110 overflow-hidden"
           style={{ boxShadow: '0 0 8px rgba(255,255,255,0.25), 0 0 2px rgba(255,255,255,0.4)' }}
@@ -112,7 +112,7 @@ export default function Clasificacion({ participaciones, enfrentamientos, result
                     </td>
                     <td className="py-3 px-3">
                       <Link
-                        to={`/jugador/${jugadorSlug(s.jugador)}`}
+                        to={`/jugador/${s.jugador?.slug || jugadorSlug(s.jugador)}`}
                         className="font-semibold text-wh-text hover:text-gold transition-colors hover:underline"
                       >
                         {s.jugador?.nombre || 'Desconocido'}

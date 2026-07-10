@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import { supabase } from '../lib/supabase'
-import { ligaSlug, isUuid } from '../lib/slug'
+import { ligaSlug, jugadorSlugIn, isUuid } from '../lib/slug'
 import Clasificacion from '../components/liga/Clasificacion'
 import Rondas from '../components/liga/Rondas'
 import MiRonda from '../components/liga/MiRonda'
@@ -44,6 +44,7 @@ export default function LigaPage() {
       const [
         { data: partsData },
         { data: rondasData },
+        { data: allJugs },
       ] = await Promise.all([
         supabase
           .from('participaciones')
@@ -54,17 +55,22 @@ export default function LigaPage() {
           .select('id, liga_id, numero, mision, mision_url, despliegue, despliegue_url, layout, layout_url')
           .eq('liga_id', ligaData.id)
           .order('numero'),
+        // Lista global de jugadores: para calcular slugs únicos frente a homónimos
+        // con el mismo criterio que usa JugadorPage al resolver la URL.
+        supabase.from('jugadores').select('id, nombre'),
       ])
 
       // La facción/imagen se guarda por participación (por liga) para preservar
       // el histórico cuando un jugador cambia de army. Se fusiona sobre el objeto
-      // `jugadores` para que los componentes downstream no cambien.
+      // `jugadores` para que los componentes downstream no cambien. Se adjunta
+      // también el slug único para los enlaces de la clasificación.
       const parts = (partsData || []).map(p => ({
         ...p,
         jugadores: p.jugadores && {
           ...p.jugadores,
           faccion: p.faccion ?? p.jugadores.faccion,
           faction_image: p.faction_image ?? p.jugadores.faction_image,
+          slug: jugadorSlugIn(p.jugadores, allJugs),
         },
       }))
 

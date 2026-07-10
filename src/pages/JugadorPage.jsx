@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import { supabase } from '../lib/supabase'
 import { FACTION_COLORS, computeStandings } from '../lib/standings'
-import { jugadorSlug, ligaSlug, isUuid } from '../lib/slug'
+import { slugify, jugadorSlugIn, ligaSlug, isUuid } from '../lib/slug'
 
 export default function JugadorPage() {
   const { id } = useParams()
@@ -21,7 +21,10 @@ export default function JugadorPage() {
         jugadorData = data
       } else {
         const { data: allJugs } = await supabase.from('jugadores').select('*')
-        jugadorData = (allJugs || []).find(j => jugadorSlug(j) === id) || null
+        jugadorData =
+          (allJugs || []).find(j => jugadorSlugIn(j, allJugs) === id) ||
+          (allJugs || []).find(j => slugify(j.nombre) === id) || // respaldo: enlaces sin sufijo
+          null
       }
 
       if (!jugadorData) {
