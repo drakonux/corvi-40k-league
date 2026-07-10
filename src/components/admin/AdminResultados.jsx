@@ -1,7 +1,10 @@
 import { useEffect, useState } from 'react'
 import { supabase } from '../../lib/supabase'
 
-const SHEET_URL = 'https://docs.google.com/spreadsheets/d/1BjadrC3EaSqrDjaMj-mqd8WFKQzYFukERDYTthESGRE/gviz/tq?tqx=out:csv&sheet=Resultados'
+// Hoja "Resultados" de la liga en curso (IV Liga 40K - 11th Edition). Fuente de
+// verdad final: al sincronizar se leen los Puntos de Victoria por jugador/ronda.
+// Al empezar una liga nueva, actualizar este ID de spreadsheet.
+const SHEET_URL = 'https://docs.google.com/spreadsheets/d/18lc6fq9kWBoqBwAVp7YPWmJOSKgI_UKK4uJH5LhSt8M/gviz/tq?tqx=out:csv&sheet=Resultados'
 
 function normalize(str) {
   return str.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim()
@@ -299,7 +302,7 @@ export default function AdminResultados() {
               disabled={!ligaId}
             >
               <option value="">Selecciona ronda...</option>
-              {rondas.map(r => <option key={r.id} value={r.id}>Ronda {r.numero} · {r.mision}</option>)}
+              {rondas.map(r => <option key={r.id} value={r.id}>{r.mision ? `Ronda ${r.numero} · ${r.mision}` : `Ronda ${r.numero}`}</option>)}
             </select>
           </div>
         </div>
