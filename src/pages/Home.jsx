@@ -2,11 +2,12 @@ import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { supabase } from '../lib/supabase'
 import { computeStandings } from '../lib/standings'
+import { ligaSlug } from '../lib/slug'
 
 function LigaActivaCard({ liga }) {
   return (
     <Link
-      to={`/liga/${liga.id}`}
+      to={`/liga/${ligaSlug(liga)}`}
       className="block card border-gold/40 hover:border-gold transition-all group relative overflow-hidden"
     >
       <div className="absolute inset-0 bg-gold/5 group-hover:bg-gold/10 transition-all" />
@@ -40,7 +41,7 @@ function LigaActivaCard({ liga }) {
 function LigaArchivoCard({ liga, champion }) {
   return (
     <Link
-      to={`/liga/${liga.id}`}
+      to={`/liga/${ligaSlug(liga)}`}
       className="block card hover:border-wh-text/30 transition-all group"
     >
       <div className="flex items-start gap-3">

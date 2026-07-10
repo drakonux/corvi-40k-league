@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import { supabase } from '../lib/supabase'
 import { FACTION_COLORS, computeStandings } from '../lib/standings'
+import { jugadorSlug, ligaSlug, isUuid } from '../lib/slug'
 
 export default function JugadorPage() {
   const { id } = useParams()
@@ -13,24 +14,29 @@ export default function JugadorPage() {
 
   useEffect(() => {
     async function load() {
-      const { data: jugadorData, error: jugErr } = await supabase
-        .from('jugadores')
-        .select('*')
-        .eq('id', id)
-        .single()
+      // El parámetro puede ser un slug (/jugador/michi) o el UUID antiguo.
+      let jugadorData = null
+      if (isUuid(id)) {
+        const { data } = await supabase.from('jugadores').select('*').eq('id', id).single()
+        jugadorData = data
+      } else {
+        const { data: allJugs } = await supabase.from('jugadores').select('*')
+        jugadorData = (allJugs || []).find(j => jugadorSlug(j) === id) || null
+      }
 
-      if (jugErr || !jugadorData) {
+      if (!jugadorData) {
         setError('Jugador no encontrado')
         setLoading(false)
         return
       }
       setJugador(jugadorData)
+      const jugId = jugadorData.id
 
       // Get ligas the player participated in
       const { data: parts } = await supabase
         .from('participaciones')
         .select('liga_id, ligas(*)')
-        .eq('jugador_id', id)
+        .eq('jugador_id', jugId)
 
       if (!parts || parts.length === 0) {
         setLigas([])
@@ -80,8 +86,8 @@ export default function JugadorPage() {
           }
         }
 
-        const myStats = standings.find(s => s.jugador_id === id)
-        const pos = standings.findIndex(s => s.jugador_id === id) + 1
+        const myStats = standings.find(s => s.jugador_id === jugId)
+        const pos = standings.findIndex(s => s.jugador_id === jugId) + 1
 
         if (myStats) {
           totals.PJ += myStats.PJ
@@ -205,7 +211,7 @@ export default function JugadorPage() {
               >
                 <div>
                   <Link
-                    to={`/liga/${liga.id}`}
+                    to={`/liga/${ligaSlug(liga)}`}
                     className="font-cinzel text-sm font-semibold text-gold hover:text-gold-light transition-colors hover:underline"
                   >
                     {liga.nombre}

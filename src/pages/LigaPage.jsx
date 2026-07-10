@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import { supabase } from '../lib/supabase'
+import { ligaSlug, isUuid } from '../lib/slug'
 import Clasificacion from '../components/liga/Clasificacion'
 import Rondas from '../components/liga/Rondas'
 import MiRonda from '../components/liga/MiRonda'
@@ -22,13 +23,18 @@ export default function LigaPage() {
     async function load() {
       setLoading(true)
 
-      const { data: ligaData, error: ligaErr } = await supabase
-        .from('ligas')
-        .select('*')
-        .eq('id', id)
-        .single()
+      // El parámetro de la URL puede ser un slug (/liga/iv-liga-40k-11th-edition)
+      // o el UUID antiguo. Si es UUID se busca directo; si no, por slug del nombre.
+      let ligaData = null
+      if (isUuid(id)) {
+        const { data } = await supabase.from('ligas').select('*').eq('id', id).single()
+        ligaData = data
+      } else {
+        const { data: allLigas } = await supabase.from('ligas').select('*')
+        ligaData = (allLigas || []).find(l => ligaSlug(l) === id) || null
+      }
 
-      if (ligaErr || !ligaData) {
+      if (!ligaData) {
         setError('Liga no encontrada')
         setLoading(false)
         return
@@ -42,11 +48,11 @@ export default function LigaPage() {
         supabase
           .from('participaciones')
           .select('jugador_id, faccion, faction_image, jugadores(id, nombre, faccion, faction_image)')
-          .eq('liga_id', id),
+          .eq('liga_id', ligaData.id),
         supabase
           .from('rondas')
           .select('id, liga_id, numero, mision, mision_url, despliegue, despliegue_url, layout, layout_url')
-          .eq('liga_id', id)
+          .eq('liga_id', ligaData.id)
           .order('numero'),
       ])
 
