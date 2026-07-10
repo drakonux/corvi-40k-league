@@ -47,10 +47,16 @@ export default function JugadorPage() {
         if (!liga) continue
 
         // Load data for this liga
-        const { data: allParts } = await supabase
+        const { data: allPartsRaw } = await supabase
           .from('participaciones')
-          .select('jugador_id, jugadores(nombre, faccion)')
+          .select('jugador_id, faccion, jugadores(nombre, faccion)')
           .eq('liga_id', liga.id)
+
+        // Facción por participación (ver LigaPage): fusiona sobre el objeto jugadores.
+        const allParts = (allPartsRaw || []).map(p => ({
+          ...p,
+          jugadores: p.jugadores && { ...p.jugadores, faccion: p.faccion ?? p.jugadores.faccion },
+        }))
 
         const { data: rondas } = await supabase
           .from('rondas')

@@ -41,7 +41,7 @@ export default function LigaPage() {
       ] = await Promise.all([
         supabase
           .from('participaciones')
-          .select('jugador_id, jugadores(id, nombre, faccion, faction_image)')
+          .select('jugador_id, faccion, faction_image, jugadores(id, nombre, faccion, faction_image)')
           .eq('liga_id', id),
         supabase
           .from('rondas')
@@ -50,7 +50,19 @@ export default function LigaPage() {
           .order('numero'),
       ])
 
-      setParticipaciones(partsData || [])
+      // La facción/imagen se guarda por participación (por liga) para preservar
+      // el histórico cuando un jugador cambia de army. Se fusiona sobre el objeto
+      // `jugadores` para que los componentes downstream no cambien.
+      const parts = (partsData || []).map(p => ({
+        ...p,
+        jugadores: p.jugadores && {
+          ...p.jugadores,
+          faccion: p.faccion ?? p.jugadores.faccion,
+          faction_image: p.faction_image ?? p.jugadores.faction_image,
+        },
+      }))
+
+      setParticipaciones(parts)
       setRondas(rondasData || [])
 
       if (rondasData && rondasData.length > 0) {

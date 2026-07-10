@@ -9,6 +9,8 @@ export default function AdminJugadores() {
   const [faccion, setFaccion] = useState(FACTIONS[0])
   const [asignLigaId, setAsignLigaId] = useState('')
   const [asignJugadorId, setAsignJugadorId] = useState('')
+  const [asignFaccion, setAsignFaccion] = useState('')
+  const [asignImage, setAsignImage] = useState('')
   const [participaciones, setParticipaciones] = useState([])
   const [loading, setLoading] = useState(false)
   const [msg, setMsg] = useState(null)
@@ -42,6 +44,14 @@ export default function AdminJugadores() {
     setLoading(false)
   }
 
+  // Al elegir jugador, la facción de la participación arranca con su army global.
+  function handleSelectJugador(jugadorId) {
+    setAsignJugadorId(jugadorId)
+    const jug = jugadores.find(j => j.id === jugadorId)
+    setAsignFaccion(jug?.faccion || '')
+    setAsignImage(jug?.faction_image || '')
+  }
+
   async function handleAsignar(e) {
     e.preventDefault()
     if (!asignLigaId || !asignJugadorId) return
@@ -49,12 +59,15 @@ export default function AdminJugadores() {
     const { error } = await supabase.from('participaciones').insert({
       liga_id: asignLigaId,
       jugador_id: asignJugadorId,
+      faccion: asignFaccion || null,
+      faction_image: asignImage.trim() || null,
     })
     if (error) {
       if (error.code === '23505') flash('El jugador ya está en esta liga', true)
       else flash(error.message, true)
     } else {
       flash('Jugador asignado a la liga')
+      setAsignImage('')
     }
     await loadData()
     setLoading(false)
@@ -110,32 +123,55 @@ export default function AdminJugadores() {
       {/* Assign to liga */}
       <div className="card">
         <h3 className="section-title">Asignar a Liga</h3>
-        <form onSubmit={handleAsignar} className="flex flex-col sm:flex-row gap-3">
-          <select
-            className="select-field"
-            value={asignJugadorId}
-            onChange={e => setAsignJugadorId(e.target.value)}
-            required
-          >
-            <option value="">Selecciona jugador...</option>
-            {jugadores.map(j => (
-              <option key={j.id} value={j.id}>{j.nombre}</option>
-            ))}
-          </select>
-          <select
-            className="select-field"
-            value={asignLigaId}
-            onChange={e => setAsignLigaId(e.target.value)}
-            required
-          >
-            <option value="">Selecciona liga...</option>
-            {ligas.map(l => (
-              <option key={l.id} value={l.id}>{l.nombre}</option>
-            ))}
-          </select>
-          <button type="submit" className="btn-gold flex-shrink-0" disabled={loading}>
-            Asignar
-          </button>
+        <p className="text-xs text-wh-muted mb-3">
+          La facción y la imagen se guardan por liga: así el histórico refleja el army con el que jugó cada uno.
+        </p>
+        <form onSubmit={handleAsignar} className="space-y-3">
+          <div className="flex flex-col sm:flex-row gap-3">
+            <select
+              className="select-field"
+              value={asignJugadorId}
+              onChange={e => handleSelectJugador(e.target.value)}
+              required
+            >
+              <option value="">Selecciona jugador...</option>
+              {jugadores.map(j => (
+                <option key={j.id} value={j.id}>{j.nombre}</option>
+              ))}
+            </select>
+            <select
+              className="select-field"
+              value={asignLigaId}
+              onChange={e => setAsignLigaId(e.target.value)}
+              required
+            >
+              <option value="">Selecciona liga...</option>
+              {ligas.map(l => (
+                <option key={l.id} value={l.id}>{l.nombre}</option>
+              ))}
+            </select>
+          </div>
+          <div className="flex flex-col sm:flex-row gap-3">
+            <select
+              className="select-field"
+              value={asignFaccion}
+              onChange={e => setAsignFaccion(e.target.value)}
+            >
+              <option value="">Facción (por liga)...</option>
+              {FACTIONS.map(f => (
+                <option key={f} value={f}>{f}</option>
+              ))}
+            </select>
+            <input
+              className="input-field"
+              value={asignImage}
+              onChange={e => setAsignImage(e.target.value)}
+              placeholder="Imagen (ej. votann-guerra.png)"
+            />
+            <button type="submit" className="btn-gold flex-shrink-0" disabled={loading}>
+              Asignar
+            </button>
+          </div>
         </form>
       </div>
 

@@ -159,7 +159,10 @@ export default function MiRonda({ participaciones, rondas, enfrentamientos, resu
 
                     {/* Right: Mission + layout/despliegue + score */}
                     <div className="text-right flex-shrink-0">
-                      <p className="font-cinzel text-wh-text font-semibold text-sm leading-tight">{m.ronda?.mision || '—'}</p>
+                      {m.ronda?.mision && (
+                        <p className="font-cinzel text-wh-text font-semibold text-sm leading-tight">{m.ronda.mision}</p>
+                      )}
+                      {(m.ronda?.layout || m.ronda?.despliegue) && (
                       <div className="text-xs text-wh-muted flex flex-wrap items-center justify-end gap-x-1 gap-y-0.5 mt-0.5">
                         {m.ronda?.layout && (
                           <span className="text-wh-text">{m.ronda.layout}</span>
@@ -171,6 +174,7 @@ export default function MiRonda({ participaciones, rondas, enfrentamientos, resu
                           </>
                         )}
                       </div>
+                      )}
                       {m.myPV !== null && (
                         <span className="font-cinzel font-bold text-gold text-sm mt-1 block">
                           {m.myPV}–{m.rivalPV}

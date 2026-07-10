@@ -106,10 +106,16 @@ export default function Home() {
   }, [])
 
   async function getChampion(ligaId) {
-    const [{ data: participaciones }, { data: rondas }] = await Promise.all([
-      supabase.from('participaciones').select('jugador_id, jugadores(nombre, faccion)').eq('liga_id', ligaId),
+    const [{ data: participacionesRaw }, { data: rondas }] = await Promise.all([
+      supabase.from('participaciones').select('jugador_id, faccion, jugadores(nombre, faccion)').eq('liga_id', ligaId),
       supabase.from('rondas').select('id').eq('liga_id', ligaId),
     ])
+
+    // Facción por participación (ver LigaPage): fusiona sobre el objeto jugadores.
+    const participaciones = (participacionesRaw || []).map(p => ({
+      ...p,
+      jugadores: p.jugadores && { ...p.jugadores, faccion: p.faccion ?? p.jugadores.faccion },
+    }))
 
     if (!rondas || rondas.length === 0) return null
     const rondaIds = rondas.map(r => r.id)

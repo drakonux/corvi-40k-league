@@ -4,6 +4,11 @@ export const FACTION_COLORS = {
   'Astra Militarum': '#6b8e23',
   'Blood Angels': '#dc2626',
   'Chaos Space Marines': '#9d4edd',
+  'Imperial Knights': '#60a5fa',
+  'Leagues of Votann': '#f59e0b',
+  "Emperor's Children": '#ec4899',
+  'Thousand Sons': '#22d3ee',
+  'Tiránidos': '#d4a373',
 }
 
 export const FACTIONS = [
@@ -12,6 +17,9 @@ export const FACTIONS = [
   'Astra Militarum',
   'Blood Angels',
   'Chaos Space Marines',
+  'Imperial Knights',
+  'Leagues of Votann',
+  "Emperor's Children",
   'Adeptus Custodes',
   'Adepta Sororitas',
   'Drukhari',

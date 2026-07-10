@@ -53,7 +53,7 @@ export default function Rondas({ rondas, enfrentamientos, resultados, participac
                     Ronda {ronda.numero}
                   </span>
                 </div>
-                {ronda.mision_url ? (
+                {ronda.mision && (ronda.mision_url ? (
                   <a href={ronda.mision_url} target="_blank" rel="noopener noreferrer"
                     className="font-cinzel text-gold text-lg font-bold hover:text-gold-light transition-colors flex items-center gap-1 hover:underline">
                     {ronda.mision}
@@ -63,11 +63,12 @@ export default function Rondas({ rondas, enfrentamientos, resultados, participac
                   </a>
                 ) : (
                   <h3 className="font-cinzel text-gold text-lg font-bold">{ronda.mision}</h3>
-                )}
+                ))}
               </div>
             </div>
 
             {/* Mission details */}
+            {(ronda.despliegue || ronda.layout) && (
             <div className="grid grid-cols-[3fr_2fr] sm:grid-cols-3 gap-3 mb-4 text-sm">
               <div>
                 <p className="text-wh-muted text-xs uppercase tracking-wide mb-0.5">Despliegue</p>
@@ -102,6 +103,7 @@ export default function Rondas({ rondas, enfrentamientos, resultados, participac
                 )}
               </div>
             </div>
+            )}
 
             {/* Matches */}
             <div className="space-y-3">
