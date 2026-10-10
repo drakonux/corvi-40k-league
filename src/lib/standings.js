@@ -9,6 +9,8 @@ export const FACTION_COLORS = {
   "Emperor's Children": '#ec4899',
   'Thousand Sons': '#22d3ee',
   'Tiránidos': '#d4a373',
+  'Dark Angels': '#16a34a',
+  'Aeldari': '#2dd4bf',
 }
 
 export const FACTIONS = [
@@ -31,6 +33,8 @@ export const FACTIONS = [
   'Death Guard',
   'World Eaters',
   'Thousand Sons',
+  'Dark Angels',
+  'Aeldari',
 ]
 
 /**

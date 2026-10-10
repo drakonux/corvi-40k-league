@@ -38,7 +38,7 @@ const PLAYERS = [
   { nombre: 'Alex',           faccion: 'Leagues of Votann', img: 'votann-guerra.png',          nuevo: true  },
   { nombre: 'Mariano',        faccion: 'Imperial Knights',  img: 'imperial-knights-ruby.png',  nuevo: true  },
   { nombre: 'David Diaz',     faccion: 'Aeldari',           img: 'aeldari-david-diaz.png',     nuevo: true  },
-  { nombre: 'David Aragonés', faccion: 'Imperial Fists',    img: 'space-marines.png',          nuevo: false },
+  { nombre: 'David Aragonés', faccion: 'Space Marines',     img: 'space-marines.png',          nuevo: false },
 ]
 
 // ─── Rondas: misión prefijada + emparejamientos (nombres canónicos de DB) ───
