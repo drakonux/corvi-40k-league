@@ -2,7 +2,7 @@ name: Supabase keep-alive
 
 # Evita que Supabase pause el proyecto por inactividad (plan Free se pausa
 # tras 7 dias sin trafico). Hace un ping de solo lectura a la API REST.
-# La VITE_SUPABASE_ANON_KEY es la clave publica anon: ya viaja en el bundle
+# La VITE_SUPABASE_ANON_KEY es la clave publica (publishable): ya viaja en el bundle
 # del frontend a cada visitante, asi que no expone nada que no fuera publico.
 
 on:
@@ -17,7 +17,7 @@ jobs:
     steps:
       - name: Ping Supabase REST API
         run: |
-          KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im92dXJ1c3JvcnV6eHlsZmtwemFtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ3MjYzODYsImV4cCI6MjA5MDMwMjM4Nn0.cARaL39MFv-nHGsVuYsokdSDN57veBAttzZAtE-ua9o"
+          KEY="sb_publishable_pTXxvMOc_JmXbkw-rnV43g_26XPi8eW"
           STATUS=$(curl -s -o /dev/null -w '%{http_code}' \
             "https://ovurusroruzxylfkpzam.supabase.co/rest/v1/resultados?select=id&limit=1" \
             -H "apikey: $KEY" \

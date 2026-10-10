@@ -17,7 +17,7 @@
 import { createClient } from '@supabase/supabase-js'
 
 const SUPABASE_URL = 'https://ovurusroruzxylfkpzam.supabase.co'
-const SUPABASE_SERVICE_ROLE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im92dXJ1c3JvcnV6eHlsZmtwemFtIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3NDcyNjM4NiwiZXhwIjoyMDkwMzAyMzg2fQ.Ivzj0pOQHGFBEqhbFmqjEdtQ2LoXUuDZHlKPmsjjkpI'
+const SUPABASE_SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY // .env.local (node --env-file=.env.local)
 
 const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY)
 
