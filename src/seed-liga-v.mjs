@@ -29,7 +29,7 @@ const FECHA_INICIO = '2026-09-28'
 const PLAYERS = [
   { nombre: 'Michi',          faccion: 'Blood Angels',      img: 'blood-angels-michi.png',     nuevo: false },
   { nombre: 'Jose María',     faccion: 'Tiránidos',         img: 'tiranidos-josemaria.png',    nuevo: false }, // "Chema" en el sheet
-  { nombre: 'Jose Luis',      faccion: 'Necrones',          img: 'necrons-jose-luis.png',      nuevo: false }, // "Luis" en el sheet
+  { nombre: 'Luis Fernando',  faccion: 'Death Guard',       img: 'death-guard-luis-fernando.png', nuevo: true }, // "Luis" en el sheet
   { nombre: 'David Grande',   faccion: 'Space Marines',     img: 'space-marines-grande.png',   nuevo: false },
   { nombre: 'Emilio',         faccion: 'Dark Angels',       img: 'dark-angels-emilio.png',     nuevo: true  },
   { nombre: 'Danny M.',       faccion: 'Thousand Sons',     img: 'thousand-sons-danny.png',    nuevo: false },
@@ -44,20 +44,20 @@ const PLAYERS = [
 // ─── Rondas: misión prefijada + emparejamientos (nombres canónicos de DB) ───
 const ROUNDS = [
   { mision: 'Albor de Guerra', pairs: [
-    ['Michi', 'Jose María'], ['Jose Luis', 'David Grande'], ['Emilio', 'Danny M.'],
+    ['Michi', 'Jose María'], ['Luis Fernando', 'David Grande'], ['Emilio', 'Danny M.'],
     ['Juan Inés', 'Angel'], ['Alex', 'Mariano'], ['David Diaz', 'David Aragonés'],
   ] },
   { mision: 'Búsqueda y Destrucción', pairs: [
-    ['Juan Inés', 'Michi'], ['Angel', 'Jose Luis'], ['Mariano', 'Emilio'],
+    ['Juan Inés', 'Michi'], ['Angel', 'Luis Fernando'], ['Mariano', 'Emilio'],
     ['David Grande', 'David Diaz'], ['David Aragonés', 'Danny M.'], ['Jose María', 'Alex'],
   ] },
   { mision: 'Choque Arrollador', pairs: [
-    ['Michi', 'David Aragonés'], ['David Diaz', 'Jose Luis'], ['Emilio', 'Alex'],
+    ['Michi', 'David Aragonés'], ['David Diaz', 'Luis Fernando'], ['Emilio', 'Alex'],
     ['Juan Inés', 'David Grande'], ['Danny M.', 'Mariano'], ['Angel', 'Jose María'],
   ] },
   { mision: 'Punto Crítico', pairs: [
     ['David Aragonés', 'Alex'], ['David Diaz', 'Juan Inés'], ['David Grande', 'Mariano'],
-    ['Michi', 'Jose Luis'], ['Jose María', 'Danny M.'], ['Angel', 'Emilio'],
+    ['Michi', 'Luis Fernando'], ['Jose María', 'Danny M.'], ['Angel', 'Emilio'],
   ] },
 ]
 

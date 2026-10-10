@@ -11,6 +11,7 @@ export const FACTION_COLORS = {
   'Tiránidos': '#a855f7',
   'Dark Angels': '#16a34a',
   'Aeldari': '#2dd4bf',
+  'Death Guard': '#b5c24a',
 }
 
 export const FACTIONS = [

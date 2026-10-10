@@ -21,7 +21,7 @@ const SHEETS = {
       'juan': 'juan ines',
       'dani m': 'danny m.',
       'chema': 'jose maria',
-      'luis': 'jose luis',
+      'luis': 'luis fernando',
     },
   },
 }
