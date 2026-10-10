@@ -1,10 +1,34 @@
 import { useEffect, useState } from 'react'
 import { supabase } from '../../lib/supabase'
 
-// Hoja "Resultados" de la liga en curso (IV Liga 40K - 11th Edition). Fuente de
-// verdad final: al sincronizar se leen los Puntos de Victoria por jugador/ronda.
-// Al empezar una liga nueva, actualizar este ID de spreadsheet.
-const SHEET_URL = 'https://docs.google.com/spreadsheets/d/18lc6fq9kWBoqBwAVp7YPWmJOSKgI_UKK4uJH5LhSt8M/gviz/tq?tqx=out:csv&sheet=Resultados'
+// Spreadsheet de resultados de cada liga (por nombre de liga). Fuente de verdad
+// final: al sincronizar se leen los Puntos de Victoria por jugador/ronda.
+// Al empezar una liga nueva, añadir aquí su entrada.
+//   formato 'matriz':          filas = jugadores, columnas = "Ronda N / Puntos"
+//   formato 'emparejamientos': bloques "Ronda N" con filas jugador, PV, rival, PV
+//   alias: nombre en el sheet -> nombre en BBDD (ambos normalizados)
+const SHEETS = {
+  'IV Liga 40K - 11th Edition': {
+    id: '18lc6fq9kWBoqBwAVp7YPWmJOSKgI_UKK4uJH5LhSt8M',
+    query: 'sheet=Resultados',
+    formato: 'matriz',
+  },
+  'V Liga 40K - 11th Edition': {
+    id: '1WNZa7lt1KZsxmEyLwWJW_d6dXOBVESUCjOL-14ki_A8',
+    query: 'gid=0&headers=0',
+    formato: 'emparejamientos',
+    alias: {
+      'juan': 'juan ines',
+      'dani m': 'danny m.',
+      'chema': 'jose maria',
+      'luis': 'jose luis',
+    },
+  },
+}
+
+function sheetUrl(sheet) {
+  return `https://docs.google.com/spreadsheets/d/${sheet.id}/gviz/tq?tqx=out:csv&${sheet.query}`
+}
 
 function normalize(str) {
   return str.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim()
@@ -151,27 +175,48 @@ export default function AdminResultados() {
     setSyncMsg(null)
 
     try {
-      const res = await fetch(SHEET_URL)
+      const sheet = SHEETS[ligas.find(l => l.id === ligaId)?.nombre]
+      if (!sheet) throw new Error('Esta liga no tiene spreadsheet configurado')
+
+      const res = await fetch(sheetUrl(sheet))
       if (!res.ok) throw new Error(`Error al obtener el sheet (${res.status})`)
       const text = await res.text()
 
-      // Parse CSV: rows[0] = headers, rows[1..] = player data
       const rows = text.split('\n').map(r =>
         r.split(',').map(c => c.replace(/^"|"$/g, '').trim())
       )
-      const headers = rows[0]
+      const sheetName = name => {
+        const norm = normalize(name)
+        return sheet.alias?.[norm] ?? norm
+      }
 
       // Build pvMatrix: normalizedPlayerName -> { roundNum: pv }
       const pvMatrix = {}
-      for (let i = 1; i < rows.length; i++) {
-        const row = rows[i]
-        if (!row[0]) continue
-        const playerNorm = normalize(row[0])
-        pvMatrix[playerNorm] = {}
-        for (let j = 1; j < headers.length; j++) {
-          const roundNum = parseInt(headers[j].replace('Ronda ', ''))
-          const pv = parseInt(row[j])
-          if (!isNaN(roundNum) && !isNaN(pv)) pvMatrix[playerNorm][roundNum] = pv
+      const setPv = (name, roundNum, value) => {
+        const playerNorm = sheetName(name)
+        pvMatrix[playerNorm] = pvMatrix[playerNorm] || {}
+        const pv = parseInt(value)
+        if (!isNaN(roundNum) && !isNaN(pv)) pvMatrix[playerNorm][roundNum] = pv
+      }
+
+      if (sheet.formato === 'emparejamientos') {
+        let roundNum = NaN
+        for (const row of rows) {
+          const ronda = row[0]?.match(/^Ronda\s+(\d+)/i)
+          if (ronda) { roundNum = parseInt(ronda[1]); continue }
+          if (!row[0] || !row[2]) continue
+          setPv(row[0], roundNum, row[1])
+          setPv(row[2], roundNum, row[3])
+        }
+      } else {
+        // rows[0] = headers, rows[1..] = player data
+        const headers = rows[0]
+        for (let i = 1; i < rows.length; i++) {
+          const row = rows[i]
+          if (!row[0]) continue
+          for (let j = 1; j < headers.length; j++) {
+            setPv(row[0], parseInt(headers[j].replace('Ronda ', '')), row[j])
+          }
         }
       }
 
@@ -216,8 +261,10 @@ export default function AdminResultados() {
         if (error) throw error
       }
 
+      const desconocidos = Object.keys(pvMatrix).filter(n => !(n in jugNormMap))
       setSyncMsg({
-        text: `✓ ${upserts.length} resultados sincronizados · ${skipped} pendientes`,
+        text: `✓ ${upserts.length} resultados sincronizados · ${skipped} pendientes`
+          + (desconocidos.length ? ` · nombres del sheet sin jugador: ${desconocidos.join(', ')}` : ''),
         isError: false,
       })
       if (rondaId) await loadRondaEnfs(rondaId)
@@ -249,7 +296,7 @@ export default function AdminResultados() {
       <div className="card">
         <h3 className="section-title">Sincronizar desde Google Sheets</h3>
         <p className="text-xs text-wh-muted mb-3">
-          Lee la hoja "Resultados" del spreadsheet de la liga y actualiza todos los resultados automáticamente.
+          Lee el spreadsheet de la liga seleccionada y actualiza todos los resultados automáticamente.
         </p>
         {syncMsg && (
           <div className={`text-sm px-3 py-2 rounded border mb-3 ${

@@ -74,7 +74,7 @@ function LigaArchivoCard({ liga, champion }) {
 }
 
 export default function Home() {
-  const [ligaActiva, setLigaActiva] = useState(null)
+  const [ligasActivas, setLigasActivas] = useState([])
   const [ligasHistoricas, setLigasHistoricas] = useState([])
   const [champions, setChampions] = useState({})
   const [loading, setLoading] = useState(true)
@@ -88,10 +88,10 @@ export default function Home() {
 
       if (!ligas) { setLoading(false); return }
 
-      const activa = ligas.find(l => l.estado === 'activa') || null
+      const activas = ligas.filter(l => l.estado === 'activa')
       const historicas = ligas.filter(l => l.estado === 'finalizada')
 
-      setLigaActiva(activa)
+      setLigasActivas(activas)
       setLigasHistoricas(historicas)
 
       // Compute champions for historical ligas
@@ -169,10 +169,12 @@ export default function Home() {
       </div>
 
       {/* Liga activa */}
-      {ligaActiva ? (
+      {ligasActivas.length > 0 ? (
         <section className="mb-10">
-          <h2 className="section-title">Liga en curso</h2>
-          <LigaActivaCard liga={ligaActiva} />
+          <h2 className="section-title">{ligasActivas.length > 1 ? 'Ligas en curso' : 'Liga en curso'}</h2>
+          <div className="space-y-4">
+            {ligasActivas.map(liga => <LigaActivaCard key={liga.id} liga={liga} />)}
+          </div>
         </section>
       ) : (
         <section className="mb-10">

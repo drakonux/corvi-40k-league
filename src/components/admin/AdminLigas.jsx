@@ -71,9 +71,7 @@ export default function AdminLigas() {
   async function handleActivar(id) {
     setLoading(true)
     try {
-      // Deactivate all
-      await supabase.from('ligas').update({ estado: 'finalizada' }).neq('id', id)
-      // Activate selected
+      // Puede haber varias ligas activas a la vez: no se tocan las demás
       const { error } = await supabase.from('ligas').update({ estado: 'activa' }).eq('id', id)
       if (error) throw error
       flash('Liga marcada como activa')
