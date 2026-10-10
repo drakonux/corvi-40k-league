@@ -8,7 +8,7 @@ export const FACTION_COLORS = {
   'Leagues of Votann': '#f59e0b',
   "Emperor's Children": '#ec4899',
   'Thousand Sons': '#22d3ee',
-  'Tiránidos': '#d4a373',
+  'Tiránidos': '#a855f7',
   'Dark Angels': '#16a34a',
   'Aeldari': '#2dd4bf',
 }
